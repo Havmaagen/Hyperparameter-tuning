@@ -26,7 +26,7 @@ parser.add_argument("--k_output_max", type=float, default=0.5)
 args = parser.parse_args()
 
 
-# Get current working directory
+# Get the current working directory
 src = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -37,17 +37,21 @@ study = optuna.create_study(direction="minimize", study_name=study_name)
 
 
 n_trials = 3
+distributions = {
+    "c_input": optuna.distributions.IntDistribution(args.c_input_min, args.c_input_max),
+    "c_hidden": optuna.distributions.IntDistribution(args.c_hidden_min, args.c_hidden_max),
+    "c_output": optuna.distributions.IntDistribution(args.c_output_min, args.c_output_max),
+    "k_input": optuna.distributions.FloatDistribution(args.k_input_min, args.k_input_max),
+    "k_hidden": optuna.distributions.FloatDistribution(args.k_hidden_min, args.k_hidden_max),
+    "k_output": optuna.distributions.FloatDistribution(args.k_output_min, args.k_output_max)
+}
 
 for _ in range(n_trials):
-    trial = study.ask()
+    trial = study.ask(distributions)
 
-    c_input = trial.suggest_int("c_input", args.c_input_min, args.c_input_max)
-    c_hidden = trial.suggest_int("c_hidden", args.c_hidden_min, args.c_hidden_max)
-    c_output = trial.suggest_int("c_output", args.c_output_min, args.c_output_max)
-
-    k_input = trial.suggest_float("k_input", args.k_input_min, args.k_input_max)
-    k_hidden = trial.suggest_float("k_hidden", args.k_hidden_min, args.k_hidden_max)
-    k_output = trial.suggest_float("k_output", args.k_output_min, args.k_output_max)
+    hyperparams = ["c_input", "c_hidden", "c_output", "k_input", "k_hidden", "k_output"]
+    c_input, c_hidden, c_output, k_input, k_hidden, k_output =\
+        list(map(trial.params.get, hyperparams))
 
     c_args = f"--c_input {c_input} --c_hidden {c_hidden} --c_output {c_output}"
     k_args = f"--k_input {k_input} --k_hidden {k_hidden} --k_output {k_output}"
@@ -72,3 +76,7 @@ with open(file_path, "w", newline="") as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows([trial.params])
+
+
+# Print the best hyperparameters
+subprocess.run(["column", "-s,", "-t", f"{src}/results.csv"], text=True)
