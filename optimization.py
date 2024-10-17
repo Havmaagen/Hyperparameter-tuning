@@ -30,8 +30,17 @@ args = parser.parse_args()
 src = os.path.dirname(os.path.abspath(__file__))
 
 
+
 # Hyperparameter optimization with Optuna
-def objective(trial):
+study_name = "\033[91mHyperparameter optimization\033[0m"
+study = optuna.create_study(direction="minimize", study_name=study_name)
+
+
+n_trials = 3
+
+for _ in range(n_trials):
+    trial = study.ask()
+
     c_input = trial.suggest_int("c_input", args.c_input_min, args.c_input_max)
     c_hidden = trial.suggest_int("c_hidden", args.c_hidden_min, args.c_hidden_max)
     c_output = trial.suggest_int("c_output", args.c_output_min, args.c_output_max)
@@ -47,13 +56,7 @@ def objective(trial):
     process = subprocess.run(command, text=True, capture_output=True)
     res = float(process.stdout)
 
-    return res
-
-
-# Perform the optimization
-study_name = "\033[91mHyperparameter optimization\033[0m"
-study = optuna.create_study(direction="minimize", study_name=study_name)
-study.optimize(objective, n_trials=3)
+    study.tell(trial, res)
 
 
 # Extract the best trial
