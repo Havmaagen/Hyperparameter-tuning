@@ -2,12 +2,8 @@
 import argparse
 import numpy as np
 
-import tensorflow as tf
-from tensorflow.keras import layers, models
+from tensorflow.keras import layers, models, optimizers
 
-
-# Turn off GPU
-tf.config.set_visible_devices([], "GPU")
 
 
 # Read in the arguments
@@ -55,8 +51,7 @@ model = models.Model(inputs=inputs, outputs=outputs, name="NN_cosh")
 
 
 # Compile and train the model
-model.compile(loss="mse", metrics=["mae"],
-              optimizer=tf.keras.optimizers.legacy.SGD(learning_rate=0.01))
+model.compile(loss="mse", metrics=["mae"], optimizer=optimizers.SGD(learning_rate=0.01))
 model.fit(x=X, y=Y, validation_split=0.2, epochs=200, shuffle=True, verbose=0)
 
 
