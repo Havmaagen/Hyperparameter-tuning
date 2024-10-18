@@ -2,7 +2,11 @@
 import argparse
 import numpy as np
 
+import tensorflow as tf
 from tensorflow.keras import layers, models, optimizers
+
+# Turn off GPU
+tf.config.set_visible_devices([], "GPU")
 
 
 

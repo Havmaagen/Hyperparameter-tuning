@@ -36,7 +36,7 @@ study_name = "\033[91mHyperparameter optimization\033[0m"
 study = optuna.create_study(direction="minimize", study_name=study_name)
 
 
-n_trials = 10
+n_trials = 3
 distributions = {
     "c_input": optuna.distributions.IntDistribution(args.c_input_min, args.c_input_max),
     "c_hidden": optuna.distributions.IntDistribution(args.c_hidden_min, args.c_hidden_max),
