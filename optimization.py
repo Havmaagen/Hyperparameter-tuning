@@ -23,7 +23,7 @@ parser.add_argument("--k_output_min", type=float, default=0.1)
 parser.add_argument("--k_output_max", type=float, default=0.5)
 
 parser.add_argument("study_name", type=str, default="Hyperparameter optimization")
-parser.add_argument("storage", type=str, default="sqlite:///hyperparameter-optimization.db")
+parser.add_argument("storage", type=str, default="hyperparameter-optimization.db")
 parser.add_argument("n_trials", type=int, default=10)
 
 args = parser.parse_args()
@@ -56,5 +56,6 @@ def objective(trial):
 
 # Perform the optimization
 if __name__ == "__main__":
-    study = optuna.load_study(study_name=args.study_name, storage=args.storage)
+    study = optuna.load_study(study_name=args.study_name,
+                              storage="sqlite:///" + args.storage)
     study.optimize(objective, n_trials=args.n_trials)
