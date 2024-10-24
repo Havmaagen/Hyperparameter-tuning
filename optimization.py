@@ -24,7 +24,7 @@ parser.add_argument("--k_output_max", type=float, default=0.5)
 
 parser.add_argument("study_name", type=str, default="Hyperparameter optimization")
 parser.add_argument("storage", type=str, default="sqlite:///hyperparameter-optimization.db")
-parser.add_argument("n_trials", type=int, default=100)
+parser.add_argument("n_trials", type=int, default=10)
 
 args = parser.parse_args()
 
