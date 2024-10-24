@@ -33,7 +33,9 @@ src = os.path.dirname(os.path.abspath(__file__))
 
 # Hyperparameter optimization with Optuna
 study_name = "\033[91mHyperparameter optimization\033[0m"
-study = optuna.create_study(direction="minimize", study_name=study_name)
+study = optuna.create_study(direction="minimize", study_name=study_name,
+                            storage="sqlite:///optimization.db",
+                            load_if_exists=True)
 
 
 n_trials = 3
