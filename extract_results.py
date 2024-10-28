@@ -9,8 +9,12 @@ import subprocess
 # Read in the arguments
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument("study_name", type=str, default="Hyperparameter optimization")
-parser.add_argument("storage", type=str, default="sqlite:///hyperparameter-optimization.db")
+parser.add_argument("study_name", type=str, nargs="?",
+                    const="Hyperparameter optimization",
+                    default="Hyperparameter optimization")
+parser.add_argument("storage", type=str, nargs="?",
+                    const="sqlite:///hyperparameter-optimization.db",
+                    default="sqlite:///hyperparameter-optimization.db")
 
 args = parser.parse_args()
 

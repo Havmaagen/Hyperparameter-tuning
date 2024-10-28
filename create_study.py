@@ -6,15 +6,18 @@ import optuna
 # Parse the arguments
 parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-parser.add_argument("study_name", type=str, default="Hyperparameter optimization")
-parser.add_argument("storage", type=str, default="hyperparameter-optimization.db")
-parser.add_argument("direction", type=str, default="minimize")
+parser.add_argument("--study_name", type=str, nargs="?",
+                    const="Hyperparameter optimization",
+                    default="Hyperparameter optimization")
+parser.add_argument("--storage", type=str, nargs="?",
+                    const="sqlite:///hyperparameter-optimization.db",
+                    default="sqlite:///hyperparameter-optimization.db")
 
 args = parser.parse_args()
 
 
 # Create a study
-study = optuna.create_study(direction=args.direction,
+study = optuna.create_study(direction="minimize",
                             study_name=args.study_name,
-                            storage="sqlite:///" + args.storage,
+                            storage=args.storage,
                             load_if_exists=True)
