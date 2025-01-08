@@ -139,11 +139,11 @@ for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 10)
                              for i in range(len(min_boundary))]):
     x = np.array(x)
 
-    val = gp.predict(x.reshape(1, -1))
+    val = penalized_gp_prediction(x)
     if val < brute_gp_val_min:
         brute_gp_X_min, brute_gp_val_min = x, val
 
-    val = rf.predict(x.reshape(1, -1))
+    val = penalized_rf_prediction(x)
     if val < brute_rf_val_min:
         brute_rf_X_min, brute_rf_val_min = x, val
 
@@ -161,9 +161,10 @@ for i in range(d):
     X_range = np.tile(minimize_gp_X_min, (n_points, 1))
     X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_gp_pred, std_gp_pred = gp.predict(X_range, return_std=True)
-
-    ax1[i].axhline(minimize_gp_val_min, color="tab:blue", ls="--", label="minimum")
+    
     ax1[i].plot(X_range[:, i], y_gp_pred, color="tab:red", label="prediction")
+    ax1[i].axhline(minimize_gp_val_min, color="tab:blue", ls="--", label="minimum value")
+    ax1[i].axvline(minimize_gp_X_min[i], color="tab:green", ls="--", label="minimum point")
     ax1[i].fill_between(X_range[:, i], y_gp_pred - std_gp_pred, y_gp_pred + std_gp_pred,
                         color="tab:red", alpha=0.3, label="mean +/- sigma")
     ax1[i].grid(alpha=0.5)
@@ -186,9 +187,10 @@ for i in range(d):
     X_range = np.tile(minimize_rf_X_min, (n_points, 1))
     X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_rf_pred = rf.predict(X_range)
-
-    ax2[i].axhline(minimize_rf_val_min, color="tab:blue", ls="--", label="minimum")
+    
     ax2[i].plot(X_range[:, i], y_rf_pred, color="tab:red", label="prediction")
+    ax2[i].axhline(minimize_rf_val_min, color="tab:blue", ls="--", label="minimum value")
+    ax2[i].axvline(minimize_rf_X_min[i], color="tab:green", ls="--", label="minimum point")
     ax2[i].grid(alpha=0.5)
     ax2[i].set_xlabel(f"x[{i}]", fontdict={"size": 10, "weight": "bold"})
     ax2[i].set_ylabel("value", fontdict={"size": 10, "weight": "bold"})
@@ -209,9 +211,10 @@ for i in range(d):
     X_range = np.tile(brute_gp_X_min, (n_points, 1))
     X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_gp_pred, std_gp_pred = gp.predict(X_range, return_std=True)
-
-    ax3[i].axhline(brute_gp_val_min, color="tab:blue", ls="--", label="minimum")
+    
     ax3[i].plot(X_range[:, i], y_gp_pred, color="tab:red", label="prediction")
+    ax3[i].axhline(brute_gp_val_min, color="tab:blue", ls="--", label="minimum value")
+    ax3[i].axvline(brute_gp_X_min, color="tab:green", ls="--", label="minimum point")
     ax3[i].fill_between(X_range[:, i], y_gp_pred - std_gp_pred, y_gp_pred + std_gp_pred,
                         color="tab:red", alpha=0.3, label="mean +/- sigma")
     ax3[i].grid(alpha=0.5)
@@ -234,9 +237,10 @@ for i in range(d):
     X_range = np.tile(brute_rf_X_min, (n_points, 1))
     X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_rf_pred = rf.predict(X_range)
-
-    ax4[i].axhline(brute_rf_val_min, color="tab:blue", ls="--", label="minimum")
+    
     ax4[i].plot(X_range[:, i], y_rf_pred, color="tab:red", label="prediction")
+    ax4[i].axhline(brute_rf_val_min, color="tab:blue", ls="--", label="minimum value")
+    ax4[i].axhline(brute_rf_X_min[i], color="tab:green", ls="--", label="minimum point")
     ax4[i].grid(alpha=0.5)
     ax4[i].set_xlabel(f"x[{i}]", fontdict={"size": 10, "weight": "bold"})
     ax4[i].set_ylabel("value", fontdict={"size": 10, "weight": "bold"})
