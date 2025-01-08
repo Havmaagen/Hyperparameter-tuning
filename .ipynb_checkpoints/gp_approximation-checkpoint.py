@@ -105,7 +105,7 @@ fig.savefig("images/rf_approximation.png")
 
 # Minimize the predicted values
 max_boundary = np.max(X, axis=0)
-max_boundary += np.full_like(max_boundary, 0.1)
+max_boundary += np.full_like(max_boundary, 0.05)
 #min_boundary = np.min(X, axis=0)
 min_boundary = np.zeros_like(max_boundary)
 
@@ -214,7 +214,7 @@ for i in range(d):
     
     ax3[i].plot(X_range[:, i], y_gp_pred, color="tab:red", label="prediction")
     ax3[i].axhline(brute_gp_val_min, color="tab:blue", ls="--", label="minimum value")
-    ax3[i].axvline(brute_gp_X_min, color="tab:green", ls="--", label="minimum point")
+    ax3[i].axvline(brute_gp_X_min[i], color="tab:green", ls="--", label="minimum point")
     ax3[i].fill_between(X_range[:, i], y_gp_pred - std_gp_pred, y_gp_pred + std_gp_pred,
                         color="tab:red", alpha=0.3, label="mean +/- sigma")
     ax3[i].grid(alpha=0.5)
