@@ -105,7 +105,7 @@ fig.savefig("images/rf_approximation.png")
 
 # Minimize the predicted values
 max_boundary = np.max(X, axis=0)
-#max_boundary += np.full_like(max_boundary, 0.1)
+max_boundary += np.full_like(max_boundary, 0.1)
 #min_boundary = np.min(X, axis=0)
 min_boundary = np.zeros_like(max_boundary)
 
@@ -135,7 +135,7 @@ minimize_rf_X_min, minimize_rf_val_min = minimize_rf_res.x, minimize_rf_res.fun
 # Perform grid search for the global minimum
 brute_gp_X_min, brute_gp_val_min = None, float("inf")
 brute_rf_X_min, brute_rf_val_min = None, float("inf")
-for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 8)
+for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 10)
                              for i in range(len(min_boundary))]):
     x = np.array(x)
 
@@ -157,7 +157,9 @@ fig1, ax1 = plt.subplots(3, 2, figsize=(12, 8))
 ax1 = ax1.ravel()
 
 for i in range(d):
-    X_range = minimize_gp_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    #X_range = minimize_gp_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    X_range = np.tile(minimize_gp_X_min, (n_points, 1))
+    X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_gp_pred, std_gp_pred = gp.predict(X_range, return_std=True)
 
     ax1[i].axhline(minimize_gp_val_min, color="tab:blue", ls="--", label="minimum")
@@ -180,7 +182,9 @@ fig2, ax2 = plt.subplots(3, 2, figsize=(12, 8))
 ax2 = ax2.ravel()
 
 for i in range(d):
-    X_range = minimize_rf_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    #X_range = minimize_rf_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    X_range = np.tile(minimize_rf_X_min, (n_points, 1))
+    X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_rf_pred = rf.predict(X_range)
 
     ax2[i].axhline(minimize_rf_val_min, color="tab:blue", ls="--", label="minimum")
@@ -201,7 +205,9 @@ fig3, ax3 = plt.subplots(3, 2, figsize=(12, 8))
 ax3 = ax3.ravel()
 
 for i in range(d):
-    X_range = brute_gp_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    #X_range = brute_gp_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    X_range = np.tile(brute_gp_X_min, (n_points, 1))
+    X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_gp_pred, std_gp_pred = gp.predict(X_range, return_std=True)
 
     ax3[i].axhline(brute_gp_val_min, color="tab:blue", ls="--", label="minimum")
@@ -224,7 +230,9 @@ fig4, ax4 = plt.subplots(3, 2, figsize=(12, 8))
 ax4 = ax4.ravel()
 
 for i in range(d):
-    X_range = brute_rf_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    #X_range = brute_rf_X_min + np.array([t * np.eye(d)[i] for t in np.linspace(-1, 1, n_points)])
+    X_range = np.tile(brute_rf_X_min, (n_points, 1))
+    X_range[:, i] = np.linspace(min_boundary[i], max_boundary[i], n_points)
     y_rf_pred = rf.predict(X_range)
 
     ax4[i].axhline(brute_rf_val_min, color="tab:blue", ls="--", label="minimum")
