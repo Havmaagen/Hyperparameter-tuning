@@ -17,8 +17,8 @@ parser.add_argument("study_name", type=str, nargs="?",
                     const="Hyperparameter optimization",
                     default="Hyperparameter optimization")
 parser.add_argument("storage", type=str, nargs="?",
-                    const="sqlite:///hyperparameter-optimization.db",
-                    default="sqlite:///hyperparameter-optimization.db")
+                    const="sqlite:///dbs/sqrtd_coupled.db",
+                    default="sqlite:///dbs/sqrtd_coupled.db")
 
 args = parser.parse_args()
 

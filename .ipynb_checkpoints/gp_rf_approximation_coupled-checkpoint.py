@@ -135,7 +135,7 @@ minimize_rf_X_min, minimize_rf_val_min = minimize_rf_res.x, minimize_rf_res.fun
 # Perform grid search for the global minimum
 brute_gp_X_min, brute_gp_val_min = None, float("inf")
 brute_rf_X_min, brute_rf_val_min = None, float("inf")
-for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 10)
+for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 50)
                              for i in range(len(min_boundary))]):
     x = np.array(x)
 
@@ -153,7 +153,7 @@ for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 10)
 n_points = 100
 
 # Plot the gp predicted values in a neighbourhood of the minimum
-fig1, ax1 = plt.subplots(3, 2, figsize=(12, 8))
+fig1, ax1 = plt.subplots(1, 2, figsize=(12, 8))
 ax1 = ax1.ravel()
 
 for i in range(d):
@@ -179,7 +179,7 @@ fig1.savefig("images/minimize_gp.png")
 
 
 # Plot the rf predicted values in a neighbourhood of the minimum
-fig2, ax2 = plt.subplots(3, 2, figsize=(12, 8))
+fig2, ax2 = plt.subplots(1, 2, figsize=(12, 8))
 ax2 = ax2.ravel()
 
 for i in range(d):
@@ -203,7 +203,7 @@ fig2.savefig("images/minimize_rf.png")
 
 
 # Plot the gp predicted values in a neighbourhood of the minimum
-fig3, ax3 = plt.subplots(3, 2, figsize=(12, 8))
+fig3, ax3 = plt.subplots(1, 2, figsize=(12, 8))
 ax3 = ax3.ravel()
 
 for i in range(d):
@@ -229,7 +229,7 @@ fig3.savefig("images/minimize_brute_force_gp.png")
 
 
 # Plot the rf predicted values in a neighbourhood of the minimum
-fig4, ax4 = plt.subplots(3, 2, figsize=(12, 8))
+fig4, ax4 = plt.subplots(1, 2, figsize=(12, 8))
 ax4 = ax4.ravel()
 
 for i in range(d):
@@ -254,24 +254,17 @@ fig4.savefig("images/minimize_brute_force_rf.png")
 
 
 # Plot the projections
-fig5, ax5 = plt.subplots(1, 3, figsize=(14, 5))
-ax5 = ax5.ravel()
+fig5, ax5 = plt.subplots(1, 1, figsize=(14, 5))
 
-for i in range(3):
-    ax5[i].scatter(X[:, 2*i], X[:, 2*i+1],
-                   color="tab:blue", marker=".", label="trials")
-    ax5[i].scatter(minimize_gp_X_min[2*i], minimize_gp_X_min[2*i+1],
-                   color="tab:orange", marker="o", label="'minimize' min")
-    ax5[i].scatter(brute_gp_X_min[2*i], brute_gp_X_min[2*i+1],
-                   color="tab:red", marker="o", label="brute force gp min")
-    ax5[i].scatter(brute_rf_X_min[2*i], brute_rf_X_min[2*i+1],
-                   color="tab:green", marker="o", label="brute force rf min")
-    ax5[i].grid(alpha=0.5)
-    ax5[i].set_xlabel(f"x[{2*i}]", fontdict={"size": 10, "weight": "bold"})
-    ax5[i].set_ylabel(f"x[{2*i+1}]", fontdict={"size": 10, "weight": "bold"})
-    ax5[i].set_title(f"Projection onto directions {2*i:d} and {2*i+1:d}",
-                     fontdict={"size": 12, "weight": "bold"})
-    ax5[i].legend()
+ax5.scatter(X[:, 0], X[:, 1], color="tab:blue", marker=".", label="trials")
+ax5.scatter(minimize_gp_X_min[0], minimize_gp_X_min[1], color="tab:orange", marker="o", label="'minimize' min")
+ax5.scatter(brute_gp_X_min[0], brute_gp_X_min[1], color="tab:red", marker="o", label="brute force gp min")
+ax5.scatter(brute_rf_X_min[0], brute_rf_X_min[1], color="tab:green", marker="o", label="brute force rf min")
+ax5.grid(alpha=0.5)
+ax5.set_xlabel(f"x[0]", fontdict={"size": 10, "weight": "bold"})
+ax5.set_ylabel(f"x[1]", fontdict={"size": 10, "weight": "bold"})
+ax5.set_title(f"Projection onto directions {2*i:d} and {2*i+1:d}", fontdict={"size": 12, "weight": "bold"})
+ax5.legend()
 
 plt.tight_layout()
 
