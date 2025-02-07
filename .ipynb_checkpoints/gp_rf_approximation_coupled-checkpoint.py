@@ -135,7 +135,7 @@ minimize_rf_X_min, minimize_rf_val_min = minimize_rf_res.x, minimize_rf_res.fun
 # Perform grid search for the global minimum
 brute_gp_X_min, brute_gp_val_min = None, float("inf")
 brute_rf_X_min, brute_rf_val_min = None, float("inf")
-for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 50)
+for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 100)
                              for i in range(len(min_boundary))]):
     x = np.array(x)
 
@@ -150,7 +150,7 @@ for x in itertools.product(*[np.linspace(min_boundary[i], max_boundary[i], 50)
 
 
 # Number of grid points for plotting
-n_points = 100
+n_points = 200
 
 # Plot the gp predicted values in a neighbourhood of the minimum
 fig1, ax1 = plt.subplots(1, 2, figsize=(12, 8))
